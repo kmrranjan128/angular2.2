@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+
+<div ng-app="orderByExample">
+  <div ng-controller="ExampleController">
+  	<input type="button" name="" value="Add" ng-click="addField()">
+    <table>
+      <tr>
+        <th ng-click="orderByMe('name')">Name</th>
+        <th ng-click="orderByMe('size')">Size</th>
+      </tr>
+      <tr ng-repeat="file in fieldList | orderBy:myOrderBy:reverse">
+        <td><input type="text" ng-model="file.name" ng-keyup="editField(fieldList,file)"></td>
+        <td><input type="text" ng-model="file.size" ng-keyup="editField(fieldList,file)" ng-blur="onBluer(file)"></td>
+      </tr>
+    </table>
+
+    <table style="border: 2px solid #000;">
+<thead>
+    <tr>
+        <td><a href="#" ng-click="addSort('name');sortReverse1=!sortReverse1">NAME<span ng-show="sortReverse1==false">&#9660;</span><span ng-show="sortReverse1==true">&#9650;</span></a></td>
+        <td><a href="#" ng-click="addSort('fish');sortReverse1=!sortReverse1">FISH<span ng-show="sortReverse1==false">&#9660;</span><span ng-show="sortReverse1==true">&#9650;</span></a></td>
+        <td><a href="#" ng-click="addSort('tastiness');sortReverse1=!sortReverse1">TASTINESS<span ng-show="sortReverse1==false">&#9660;</span><span ng-show="sortReverse1==true">&#9650;</span></a></td>
+    </tr>
+</thead>
+<tbody>
+    <tr ng-repeat="s in sushi | orderBy:sortArray:sortReverse1 | filter:searchProperty1">
+        <td>{{ s.name }}</td>
+        <td>{{ s.fish }}</td>
+        <td>{{ s.tastiness }}</td>
+    </tr>
+</tbody>
+</table>
+  </div>
+</div>
+
+</body>
+</html>
+<!-- ng-repeat="file in files | orderBy:'size':true:fileSizeComparator" -->
