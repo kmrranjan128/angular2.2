@@ -1,0 +1,38 @@
+DECLARE @CollegeId INT = 10280001,@CompanyId INT = 105, @EndTime DateTime = '9999-12-31'
+			;WITH 
+			CTETREE AS 
+			(--==== This is the "anchor" part of the recursive CTE
+			 SELECT AccountGroupId,
+					ParentGroupId,
+					GroupName,
+					1 AS HLevel,
+					CAST(CAST(GroupName AS BINARY(4)) AS VARBINARY(8000)) AS SortPath,
+					FinalAccountHeadId,
+					TrialBalancePosition,
+					IncExpBalanceSheetPosition
+			   FROM [Meta].[AccountGroup]   
+			  WHERE CollegeId = @CollegeId 
+				AND CompanyId = @CompanyId 
+				AND EndTime = @ENDTIME
+				AND FinalAccountHeadId in (Select Value from dbo.Split('1$2$3$4','$'))
+				AND ParentGroupId is null
+				 
+			  UNION ALL -------------------------------------------------------------------
+			 --==== This is the "recursive" part of the CTE that adds 1 for each level
+				 -- and concatenates each level of AssetID's to the SortPath column.
+			 SELECT RECUR.AccountGroupId,
+					RECUR.ParentGroupId,
+					RECUR.GroupName,
+					CTE.HLevel + 1 AS HLevel,
+					CAST(CTE.SortPath + CAST(Recur.GroupName AS BINARY(4)) AS VARBINARY(8000)) AS SortPath,
+					CTE.FinalAccountHeadId,
+					CTE.TrialBalancePosition,
+					CTE.IncExpBalanceSheetPosition
+			   FROM[Meta].[AccountGroup] AS RECUR
+			  INNER JOIN CTETREE AS CTE  ON cte.AccountGroupId = RECUR.ParentGroupId
+			  WHERE RECUR.CollegeId = @CollegeId 
+				AND RECUR.CompanyId = @CompanyId 
+				AND RECUR.EndTime = @ENDTIME	
+			)--==== This final INSERT/SELECT creates the "narrow surrogate" column (NodeNumber)
+
+			SELECT AccountGroupId,ParentGroupId,GroupName,SPACE((Hlevel-1)*4)+GroupName FROM CTETree ORDER BY isnull(FinalAccountHeadId,9999999),SortPath
