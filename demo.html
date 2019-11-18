@@ -1,0 +1,94 @@
+<html>
+    <head>
+          
+            <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">    <style type="text/css">
+        
+         .container{
+             width: 100%;
+         }
+         /* .progress{
+             margin: 300px auto;
+         } */
+         ul{
+                text-align: center
+         }
+         ul li{
+             display: inline-block;
+             width: 15%;
+             position: relative;
+         }
+         ul li .fa{
+             background: #ccc;
+             min-width: 20px;
+             max-width: auto;
+             height: 20px;
+             line-height: 20px;
+             color: #fff;
+             border-radius: 50%;
+             margin: auto;
+             padding: 5px;
+         }
+         ul li .my::after{
+             content: '';
+             background: #ccc;
+             height: 3px;
+             width: 100%;
+             float: right;
+             display: block;
+             position: absolute;
+            
+             top:50px;
+             z-index: -1;
+         }
+         
+         ul li .my:last-child::before{
+             content: none;
+         }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="progress">
+            <ul >
+                <li >
+                    <span>Rudi Weber</span><br><br>
+                    <i class="my fa fa-check" style="background-color: green"></i>
+                    <p>Ak</p>
+                </li>
+                <li>
+                    <span>Rudi Weber</span><br><br>
+                    <i class="my fa fa-times" style="background-color: red"></i>
+                    <p>Ck</p>
+                </li>
+               
+                <li>
+                    <span>Step 4</span><br><br>
+                    <span class="my fa" style=" color: black;padding: 5px;background-color: white;"> pending approval</span>
+                    <p>Dk</p>
+            </li>
+            <li>
+                    <span>Step 4</span><br><br>
+                    <span class="my fa" style=" color: black;padding: 5px;background-color: white;"> pending approval</span>
+                    <p>Dk</p>
+            </li>
+                <li>
+                        <span>Step 4</span><br><br>
+                        <i class="my fa fa-refresh"></i>
+                        <p>Dk</p>
+                </li>
+                <li>
+                        <span>Step 4</span><br><br>
+                        <i class="my fa fa-refresh"></i>
+                        <p>Dk</p>
+                </li>
+               
+            </ul>
+        </div>
+        </div>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!------ Include the above in your HEAD tag ---------->
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    </body>
+</html>
