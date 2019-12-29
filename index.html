@@ -1,54 +1,87 @@
-<!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-	<script type="text/javascript" src="main.js"></script>
+    <head>
+<script src="jexcel.js"></script>
+<script src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
+<link rel="stylesheet" href="https://bossanova.uk/jexcel/v3/jexcel.css" type="text/css" />
+<link rel="stylesheet" href="https://bossanova.uk/jsuites/v2/jsuites.css" type="text/css" />
+
+<link rel="stylesheet" href="https://bossanova.uk/jexcel/v3/jexcel.datatables.css" type="text/css" />
 </head>
 <body>
 
-<div ng-app="orderByExample">
-  <div ng-controller="ExampleController">
-  	<input type="button" name="" value="Add" ng-click="addField()">
-    <table>
-      <tr>
-        <th ng-click="orderByMe('name')">Name</th>
-        <th ng-click="orderByMe('size')">Size</th>
-      </tr>
-      <tr ng-repeat="file in fieldList | orderBy:myOrderBy:reverse">
-        <td><input type="text" ng-model="file.name" ng-keyup="editField(fieldList,file)"></td>
-        <td><input type="text" ng-model="file.size" ng-keyup="editField(fieldList,file)" ng-blur="onBluer(file)"></td>
-      </tr>
-    </table>
+    <div id="spreadsheet"></div>
 
-    <table style="border: 2px solid #000;">
-<thead>
-    <tr>
-        <td><a href="#" ng-click="addSort('name');sortReverse1=!sortReverse1">NAME<span ng-show="sortReverse1==false">&#9660;</span><span ng-show="sortReverse1==true">&#9650;</span></a></td>
-        <td><a href="#" ng-click="addSort('fish');sortReverse1=!sortReverse1">FISH<span ng-show="sortReverse1==false">&#9660;</span><span ng-show="sortReverse1==true">&#9650;</span></a></td>
-        <td><a href="#" ng-click="addSort('tastiness');sortReverse1=!sortReverse1">TASTINESS<span ng-show="sortReverse1==false">&#9660;</span><span ng-show="sortReverse1==true">&#9650;</span></a></td>
-    </tr>
-</thead>
-<tbody>Greetings from DataHills,
-
-1st Class Recordings and Materials @ Google Drive:
-https://drive.google.com/drive/folders/1lnfmNHarpYntzKJwbZlYtxzwcztKL3Rm?usp=sharing
-
-Please attend 2nd class today @ 06:00 PM to 07:00 PM IST (Evening - Indian Time)
-Online Meeting Link: https://zoom.us/j/2347100041
-
-Classroom Address: Near Malabar Gold, KPHB, Hyderabad, India.
-For Details Contact: 9292005440, 7780163743, datahills7@gmail.com
-    <tr ng-repeat="s in sushi | orderBy:sortArray:sortReverse1 | filter:searchProperty1">
-        <td>{{ s.name }}</td>
-        <td>{{ s.fish }}</td>
-        <td>{{ s.tastiness }}</td>
-    </tr>
-</tbody>
-</table>
-  </div>
-</div>
+    <script>
+    var data = [
+        ['Jazz', 'Honda', '2019-02-12', '', true, '$ 2.000,00'],
+        ['Civic', 'Honda', '2018-07-11', '', true, '$ 4.000,01'],
+    ];
+    
+    jexcel(document.getElementById('spreadsheet'), {
+        data:data,
+        search:true,
+        columns: [
+            {
+                type: 'text',
+                title:'Car',
+                width:90
+            },
+            {
+                type: 'dropdown',
+                title:'Make',
+                width:120,
+                source:[
+                    "Alfa Romeo",
+                    "Audi",
+                    "Bmw",
+                    "Chevrolet",
+                    "Chrystler",
+                    "Dodge",
+                    "Ferrari",
+                    "Fiat",
+                    "Ford",
+                    "Honda",
+                    "Hyundai",
+                    "Jaguar",
+                    "Jeep",
+                    "Kia",
+                    "Mazda",
+                    "Mercedez-Benz",
+                    "Mitsubish",
+                    "Nissan",
+                    "Peugeot",
+                    "Porsche",
+                    "Subaru",
+                    "Suzuki",
+                    "Toyota",
+                    "Volkswagen"
+                  ]
+            },
+            {
+                type: 'calendar',
+                title:'Available',
+                width:120
+            },
+            {
+                type: 'image',
+                title:'Photo',
+                width:120
+            },
+            {
+                type: 'checkbox',
+                title:'Stock',
+                width:80
+            },
+            {
+                type: 'numeric',
+                title:'Price',
+                mask:'$ #.##,00',
+                width:80,
+                decimal:','
+            }
+         ]
+    });
+    </script>
 
 </body>
 </html>
-<!-- ng-repeat="file in files | orderBy:'size':true:fileSizeComparator" -->
