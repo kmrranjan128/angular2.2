@@ -1,6 +1,6 @@
 
 /**
- * jExcel v3.7.1
+ * jExcel v3.7.3
  *
  * Author: Paul Hodel <paul.hodel@gmail.com>
  * Website: https://bossanova.uk/jexcel/
@@ -9,7 +9,7 @@
  * This software is distribute under MIT License
  */
 
-if (! jSuites && typeof(require) === 'function') {
+ if (! jSuites && typeof(require) === 'function') {
     var jSuites = require('jsuites');
     require('jsuites/dist/jsuites.css');
 }
@@ -105,6 +105,13 @@ if (! jSuites && typeof(require) === 'function') {
             toolbar:null,
             // Allow search
             search:false,
+			
+			//akshay val dd start
+			  // Allow dropdown columnheader
+            dropdownColumn:false,
+			//akshay val dd end
+			
+			
             // Create pagination
             pagination:false,
             paginationOptions:null,
@@ -158,11 +165,18 @@ if (! jSuites && typeof(require) === 'function') {
             onchangemeta:null,
             // Customize any cell behavior
             updateTable:null,
+			 onkeyup:null,
             // Texts
             text:{
                 noRecordsFound: 'No records found',
                 showingPage: 'Showing page {0} of {1} entries',
                 show: 'Show ',
+				
+				//akshay val text start
+            selectColumn:'Select Column',
+			//akshay val text end
+			
+				
                 search: 'Search',
                 entries: ' entries',
                 columnName: 'Column name',
@@ -193,7 +207,7 @@ if (! jSuites && typeof(require) === 'function') {
                 noCellsSelected: 'No cells selected',
             },
             // About message
-            about:"jExcel CE Spreadsheet\nVersion 3.7.1\nAuthor: Paul Hodel <paul.hodel@gmail.com>\nWebsite: https://bossanova.uk/jexcel/v3",
+            about:"jExcel CE Spreadsheet\nVersion 3.7.3\nAuthor: Paul Hodel <paul.hodel@gmail.com>\nWebsite: https://bossanova.uk/jexcel/v3",
         };
     
         // Loading initial configuration from user
@@ -218,6 +232,17 @@ if (! jSuites && typeof(require) === 'function') {
         obj.rows = [];
         obj.results = null;
         obj.searchInput = null;
+		
+		//akshay val dropdownInput start
+           obj.dropdownInput = null;
+		//akshay val dropdownInput end
+		
+		//akshay val Input start
+		   obj.searchCustomInput = null;
+		   obj.colNumber = null;
+		//akshay val Input end
+			
+		
         obj.toolbar = null;
         obj.pagination = null;
         obj.pageNumber = null;
@@ -404,101 +429,67 @@ if (! jSuites && typeof(require) === 'function') {
             obj.toolbar.classList.add('jexcel_toolbar');
     
             // Search
-       
-
-            var booleanSelect =[];
-            obj.x = document.createElement("SELECT");
-            obj.x.setAttribute("id", "mySelect");
-            document.body.appendChild(obj.x);
-            obj.x.onchange = function() {
-              
-                
-                for (let i = 0; i < obj.options.data.length; i++) {
-                    const element = obj.options.data[i];
-                    booleanSelect.push(element[this.value]);
-                    
-                }
-                //console.log(booleanSelect)
-                m1(booleanSelect)
-                // var data = booleanSelect.filter(function(v, k)  {
-                //     console.log(v)
-                //     console.log(k)
-                // })
-
-                booleanSelect.length=0;
-               
-               
-               // alert(this.value)
-                //booleanSelect=true;
-            }
-                 obj.searchInput1 = document.createElement('input');
-                //obj.searchInput1.classList.add('jexcel_search1');
-               obj.searchInput1.setAttribute("id", "jexcel_search1");
-                document.body.appendChild(obj.searchInput1);
-            function m1(val){
-                console.log(val)
-                var e = document.getElementById("mySelect");
-               // console.log(fleet)
-                var txt = e.options[e.selectedIndex].value;
-                var lenInc =parseInt(txt)+1;
-                console.log(txt)
-                console.log(lenInc)
-                obj.searchInput1.onkeyup = function() {
-                   console.log(this.value)
-                   var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("jexcel_search1");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("jexcel_table");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[lenInc];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
-                   //var keyword = document.getElementById("jexcel_search1").value;
-                  //console.log(keyword)
-                  
-                   
-                }
-                    
-            }
-           
-
-
-
-            console.log(obj)
-            for (let i = 0; i < obj.options.data.length; i++) {
-                const element = obj.options.data[i];
-                console.log(element[0])
-                
-            }
-            
-          
-            for (var i = 0; i < obj.options.columns.length; i++) {
-                var z = document.createElement("option");
-            z.setAttribute("value", i);
-            var t = document.createTextNode(obj.options.columns[i].title);
-            z.appendChild(t);
-            document.getElementById("mySelect").appendChild(z);
-                
-            }
-            
             var searchContainer = document.createElement('div');
-            var searchText = document.createTextNode((obj.options.text.search) + ': ');
+			//  var searchText = document.createTextNode((obj.options.text.search) + ': ');
             obj.searchInput = document.createElement('input');
             obj.searchInput.classList.add('jexcel_search');
-            searchContainer.appendChild(searchText);
+			//   searchContainer.appendChild(searchText);
             searchContainer.appendChild(obj.searchInput);
             obj.searchInput.onfocus = function() {
                 obj.resetSelection();
-            }
+            } 
+			
+          
+            
+			
+	
+			 // custome dropdown
+            var dropdownContainer = document.createElement('div');
+			var newDiv=document.createElement('div');
+			var htmldd = '<select>';
+			htmldd+='<option value="" disabled selected>Select your column</option>';
+			for(var i = 0; i < obj.options.columns.length; i++) {
+			 htmldd += "<option value='"+obj.options.columns[i].name+"'>"+obj.options.columns[i].title+"</option>";
+			}
+			htmldd += '</select>';
+			newDiv.innerHTML= htmldd;
+			newDiv.setAttribute("id",'customdd');
+            obj.dropdownInput = newDiv;
+            obj.dropdownInput.classList.add('jexcel_dd');
+           
+		    obj.dropdownInput.onchange = function(inpValue) {
+			  obj.colNumber=inpValue.target.value;
+            } 
+            
     
+	 // custom search
+            var searchCustomContainer = document.createElement('div');
+            obj.searchCustomInput = document.createElement('input');
+			obj.searchCustomInput.setAttribute("id",'custominp');
+			obj.searchCustomInput.setAttribute("placeholder",'search');
+				newDiv.getAttribute('customdd');
+		  
+		     dropdownContainer.appendChild(obj.dropdownInput);
+			 dropdownContainer.appendChild(obj.searchCustomInput);
+		  //var arch=document.getElementById("customdd");
+		 // console.log()
+		//  searchCustomContainer.appendChild(.appendChild(obj.searchCustomInput));
+		  
+		    obj.searchCustomInput.onkeyup = function() {  
+			  
+            // Go through the rows to get the data
+            for (var j = 0; j < obj.options.data.length; j++) {
+				var comVal=obj.options.data[j][obj.colNumber]+"";
+				if(comVal.toLowerCase().match(this.value.toLowerCase()+"")){
+					obj.rows[j].style.display = '';
+				}else{
+					 obj.rows[j].style.display = 'none';
+				}
+             }
+			
+            } 
+	
+	
             // Pagination select option
             var paginationUpdateContainer = document.createElement('div');
     
@@ -527,6 +518,12 @@ if (! jSuites && typeof(require) === 'function') {
             obj.filter.classList.add('jexcel_filter');
             obj.filter.appendChild(paginationUpdateContainer);
             obj.filter.appendChild(searchContainer);
+			
+			//added by akshay start
+           // obj.filter.appendChild(dropdownContainer);
+			//   obj.filter.appendChild(searchCustomContainer);
+			//added  by akshay end
+			
     
             // Colsgroup
             obj.colgroupContainer = document.createElement('colgroup');
@@ -550,6 +547,9 @@ if (! jSuites && typeof(require) === 'function') {
             obj.headerContainer = document.createElement('tr');
             var tempCol = document.createElement('td');
             tempCol.classList.add('jexcel_selectall');
+			//added by akshay
+			//tempCol.classList.add('jexcel_filter');
+			
             obj.headerContainer.appendChild(tempCol);
     
             for (var i = 0; i < obj.options.columns.length; i++) {
@@ -565,7 +565,6 @@ if (! jSuites && typeof(require) === 'function') {
             // Content table
             obj.table = document.createElement('table');
             obj.table.classList.add('jexcel');
-            obj.table.setAttribute("id", "jexcel_table");
             obj.table.setAttribute('cellpadding', '0');
             obj.table.setAttribute('cellspacing', '0');
             obj.table.setAttribute('unselectable', 'yes');
@@ -631,6 +630,8 @@ if (! jSuites && typeof(require) === 'function') {
             }
     
             // Elements
+			obj.content.appendChild(dropdownContainer);
+			//akshay
             obj.content.appendChild(obj.table);
             obj.content.appendChild(obj.corner);
             obj.content.appendChild(obj.textarea);
@@ -655,7 +656,7 @@ if (! jSuites && typeof(require) === 'function') {
                 if (obj.options.tableOverflow == true) {
                     if (obj.options.tableHeight) {
                         obj.content.style['overflow-y'] = 'auto';
-                        obj.content.style.height = obj.options.tableHeight;
+                        obj.content.style.maxHeight = obj.options.tableHeight;
                     }
                     if (obj.options.tableWidth) {
                         obj.content.style['overflow-x'] = 'auto';
@@ -4272,7 +4273,29 @@ if (! jSuites && typeof(require) === 'function') {
                 obj.updateCornerPosition();
             },0);
         }
-    
+
+        /**
+         * Show column
+         */
+        obj.showColumn = function(colNumber) {
+            obj.headers[colNumber].style.display = '';
+            obj.colgroup[colNumber].style.display = '';
+            for (var j = 0; j < obj.options.data.length; j++) {
+                obj.records[j][colNumber].style.display = '';
+            }
+        }
+
+        /**
+         * Hide column
+         */
+        obj.hideColumn = function(colNumber) {
+            obj.headers[colNumber].style.display = 'none';
+            obj.colgroup[colNumber].style.display = 'none';
+            for (var j = 0; j < obj.options.data.length; j++) {
+                obj.records[j][colNumber].style.display = 'none';
+            }
+        }
+
         /**
          * Show index column
          */
@@ -5381,7 +5404,7 @@ if (! jSuites && typeof(require) === 'function') {
                 data += obj.copy(false, obj.options.csvDelimiter, true);
                 // Download element
                 var pom = document.createElement('a');
-                var blob = new Blob([data], {type: 'text/csv;charset=utf-8;'});
+                var blob = new Blob(["\uFEFF"+data], {type: 'text/csv;charset=utf-8;'});
                 var url = URL.createObjectURL(blob);
                 pom.href = url;
                 pom.setAttribute('download', obj.options.csvFileName + '.csv');
@@ -6631,9 +6654,14 @@ if (! jSuites && typeof(require) === 'function') {
                         }
                     } else {
                         if (e.target.parentNode.classList.contains('jexcel_nested')) {
-                            var column = e.target.getAttribute('data-column').split(',');
-                            var c1 = parseInt(column[0]);
-                            var c2 = parseInt(column[column.length-1]);
+                            if (e.target.getAttribute('data-column')) {
+                                var column = e.target.getAttribute('data-column').split(',');
+                                var c1 = parseInt(column[0]);
+                                var c2 = parseInt(column[column.length-1]);
+                            } else {
+                                var c1 = 0;
+                                var c2 = jexcel.current.options.columns.length - 1;
+                            }
                             jexcel.current.updateSelectionFromCoords(c1, 0, c2, jexcel.current.options.data.length - 1);
                         }
                     }
