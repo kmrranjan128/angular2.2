@@ -1,0 +1,78 @@
+height: 22px;
+    width: 171px;
+	
+	1> search
+	        //akshay val dd start
+			// Allow dropdown columnheader
+            dropdownColumn:false,
+			//akshay val dd end
+	2>
+	//akshay val text start
+                selectColumn:'Select Column',
+			    //akshay val text end
+				
+				3> nothing
+				4>
+					//akshay val dropdownInput start
+           obj.dropdownInput = null;
+		//akshay val dropdownInput end
+		
+		//akshay val Input start
+		   obj.searchCustomInput = null;
+		   obj.colNumber = null;
+		//akshay val Input end
+			
+			
+			5>
+			 // custome dropdown
+            var dropdownContainer = document.createElement('div');
+			var newDiv=document.createElement('div');
+			var htmldd = '<select style="height: 22px;width: 171px;">';
+			htmldd+='<option value="" disabled selected>Select your column</option>';
+			for(var i = 0; i < obj.options.columns.length; i++) {
+			 htmldd += "<option value='"+obj.options.columns[i].name+"'>"+obj.options.columns[i].title+"</option>";
+			}
+			htmldd += '</select>';
+			newDiv.innerHTML= htmldd;
+			newDiv.setAttribute("id",'customdd');
+            obj.dropdownInput = newDiv;
+            obj.dropdownInput.classList.add('jexcel_dd');
+           
+		    obj.dropdownInput.onchange = function(inpValue) {
+			  obj.colNumber=inpValue.target.value;
+            } 
+			
+			
+			
+	 // custom search
+            var searchCustomContainer = document.createElement('div');
+            obj.searchCustomInput = document.createElement('input');
+			obj.searchCustomInput.setAttribute("id",'custominp');
+			obj.searchCustomInput.setAttribute("placeholder",'search');
+				
+		  
+		     dropdownContainer.appendChild(obj.dropdownInput);
+			 dropdownContainer.appendChild(obj.searchCustomInput);
+			 
+			 
+		     obj.searchCustomInput.onkeyup = function() {  
+			  
+            // Go through the rows to get the data
+            for (var j = 0; j < obj.options.data.length; j++) {
+				var comVal=obj.options.data[j][obj.colNumber]+"";
+				if(comVal.toLowerCase().match(this.value.toLowerCase())){
+					obj.rows[j].style.display = '';
+				}else{
+					 obj.rows[j].style.display = 'none';
+				}
+             }
+			
+            } 
+	
+            6>
+			//search
+			 // Elements
+			obj.content.appendChild(dropdownContainer);
+			//akshay
+			
+			
